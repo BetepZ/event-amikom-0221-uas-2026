@@ -1,58 +1,88 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+AmikomEventHub 🎟️
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+AmikomEventHub adalah platform manajemen event dan ticketing modern yang dibangun untuk memenuhi kebutuhan Ujian Akhir Semester (UAS) mata kuliah Digital Bisnis. Aplikasi ini dirancang dengan arsitektur Multi-Tenant, memungkinkan berbagai pihak penyelenggara (Tenant) untuk membuat, mengelola, dan memvalidasi tiket acara mereka dalam satu pintu.
 
-## About Laravel
+🌟 Fitur Utama
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Multi-Tenant & RBAC (Role-Based Access Control):
+Sistem otorisasi terpusat dengan 3 tingkatan peran pengguna:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Super Admin: Mengawasi dan mengatur hak akses seluruh pengguna di platform.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Tenant (Penyelenggara): Dapat membuat acara, mengatur kuota tiket, dan melakukan check-in pengunjung.
 
-## Learning Laravel
+Pembeli: Dapat menelusuri acara, membeli tiket, dan mengunduh E-Sertifikat.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+SSO Google Authentication: Registrasi dan login yang cepat dan aman menggunakan akun Google.
 
-In addition, [Laracasts](https://laracasts.com) contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Dynamic Pricing & Manajemen Kuota: Penyelenggara dapat membuat berbagai tingkat tiket (misal: Early Bird, Regular) dengan harga dan kuota yang terpisah (termasuk tiket gratis).
 
-You can also watch bite-sized lessons with real-world projects on [Laravel Learn](https://laravel.com/learn), where you will be guided through building a Laravel application from scratch while learning PHP fundamentals.
+Reserved Ticketing System: Mencegah masalah race-condition (bentrok kuota) dengan sistem pemesanan booking selama 15 menit. Jika tidak dibayar, kuota akan dikembalikan otomatis menggunakan fitur Background Scheduler.
 
-## Agentic Development
+Midtrans Payment Gateway: Integrasi pembayaran aman dan otomatis menggunakan Midtrans Snap API dan Webhook.
 
-Laravel's predictable structure and conventions make it ideal for AI coding agents like Claude Code, Cursor, and GitHub Copilot. Install [Laravel Boost](https://laravel.com/docs/ai) to supercharge your AI workflow:
+Sistem Check-In QR Code (Live Scanner): Penyelenggara dibekali fitur pemindai QR Code bawaan (touch-friendly) untuk memvalidasi tiket pengunjung di pintu masuk acara.
 
-```bash
-composer require laravel/boost --dev
+E-Sertifikat Otomatis: Pembuatan dan pengunduhan sertifikat PDF secara dinamis bagi peserta yang telah terkonfirmasi hadir (check-in).
 
-php artisan boost:install
-```
+Sistem Ulasan & Penilaian (Rating): Pengunjung yang telah menghadiri acara dapat meninggalkan ulasan untuk membantu pengunjung lain.
 
-Boost provides your agent 15+ tools and skills that help agents build Laravel applications while following best practices.
+🚀 Teknologi yang Digunakan
 
-## Contributing
+Backend: Laravel (v11/12), PHP 8.2+
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Frontend: Tailwind CSS (Utility-first styling), Alpine.js (Lightweight reactivity)
 
-## Code of Conduct
+Database: SQLite (Lokal) / PostgreSQL/MySQL (Produksi)
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Library Tambahan:
 
-## Security Vulnerabilities
+laravel/socialite (Autentikasi Google)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+simplesoftwareio/simple-qrcode (Generator Tiket QR)
 
-## License
+barryvdh/laravel-dompdf (Generator E-Sertifikat)
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+html5-qrcode (Scanner Kamera Pihak Ketiga)
+
+📦 Panduan Instalasi (Lokal)
+
+Jika Anda ingin menjalankan proyek ini secara lokal, ikuti langkah-langkah berikut:
+
+Kloning repositori ini:
+
+git clone https://github.com/username-anda/amikom-event-hub.git
+
+
+Masuk ke direktori proyek dan instal dependensi PHP & Node.js:
+
+cd amikom-event-hub
+composer install
+npm install && npm run build
+
+
+Salin file environment dan hasilkan kunci aplikasi:
+
+cp .env.example .env
+php artisan key:generate
+
+
+Konfigurasikan file .env Anda, terutama untuk database, Midtrans, dan Google SSO.
+
+Jalankan migrasi database beserta data awal (Seeder):
+
+php artisan migrate --seed
+
+
+Tautkan penyimpanan (Storage) agar gambar banner dapat diakses:
+
+php artisan storage:link
+
+
+Jalankan server lokal dan scheduler (untuk fitur expired tiket):
+
+php artisan serve
+php artisan schedule:work
+
+
+Dibuat dengan 💻 untuk UAS Digital Bisnis - 2026.
