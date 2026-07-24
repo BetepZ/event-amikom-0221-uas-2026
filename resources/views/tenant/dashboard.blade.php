@@ -54,7 +54,10 @@
                                         <span class="text-xs font-semibold text-blue-600 bg-blue-50 px-2 py-1 rounded">
                                             {{ $event->category->name ?? 'Uncategorized' }}
                                         </span>
-                                        <a href="#" class="text-sm text-gray-600 hover:text-blue-600 underline">Kelola</a>
+                                        <a href="{{ route('tenant.events.edit', $event->id) }}" class="text-sm font-bold text-gray-600 hover:text-blue-600 transition-colors flex items-center">
+                                            Kelola
+                                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+                                        </a>
                                     </div>
                                 </div>
                             </div>

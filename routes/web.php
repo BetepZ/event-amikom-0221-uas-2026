@@ -10,6 +10,7 @@ use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PaymentCallbackController;
 use App\Http\Controllers\Tenant\EventController as TenantEventController;
 use App\Http\Controllers\Tenant\ScannerController;
+use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -18,15 +19,15 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-// ==========================================
+
 // 1. RUTE PUBLIK (Bisa diakses siapa saja)
-// ==========================================
+
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/event/{slug}', [EventController::class, 'show'])->name('events.show');
 
-// ==========================================
+
 // 2. RUTE GUEST (Hanya untuk yang belum login)
-// ==========================================
+
 Route::middleware('guest')->group(function () {
     Route::get('auth/google', [GoogleController::class, 'redirect'])->name('google.login');
     Route::get('auth/google/callback', [GoogleController::class, 'callback'])->name('google.callback');
@@ -40,9 +41,9 @@ Route::post('/payments/midtrans-notification', [PaymentCallbackController::class
     ->name('midtrans.callback')
     ->withoutMiddleware([\Illuminate\Foundation\Http\Middleware\VerifyCsrfToken::class]);
 
-// ==========================================
+
 // 4. RUTE PEMBELI / UMUM (Harus Login)
-// ==========================================
+
 Route::middleware(['auth'])->group(function () {
 
     // Dashboard Tiket Saya
@@ -66,27 +67,27 @@ Route::middleware(['auth'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-// ==========================================
 // 5. RUTE PENYELENGGARA / TENANT
-// ==========================================
-// Harus login DAN memiliki role 'tenant'
+
 Route::middleware(['auth', 'role:tenant'])->prefix('tenant')->name('tenant.')->group(function () {
-
-    // Dashboard Tenant
     Route::get('/dashboard', [TenantEventController::class, 'index'])->name('dashboard');
-
-    // CRUD Event
     Route::get('/events/create', [TenantEventController::class, 'create'])->name('events.create');
     Route::post('/events', [TenantEventController::class, 'store'])->name('events.store');
 
-    // Scanner Tiket
-    Route::get('/scanner', [ScannerController::class, 'index'])->name('scanner.index');
-    Route::post('/scanner/verify', [ScannerController::class, 'verify'])->name('scanner.verify');
+    // --- Rute Edit & Delete Event ---
+    Route::get('/events/{event}/edit', [TenantEventController::class, 'edit'])->name('events.edit');
+    Route::put('/events/{event}', [TenantEventController::class, 'update'])->name('events.update');
+    Route::delete('/events/{event}', [TenantEventController::class, 'destroy'])->name('events.destroy');
+    // ---------------------------------
+
+    Route::get('/scanner', [\App\Http\Controllers\Tenant\ScannerController::class, 'index'])->name('scanner.index');
+    Route::post('/scanner/verify', [\App\Http\Controllers\Tenant\ScannerController::class, 'verify'])->name('scanner.verify');
 });
 
 Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
     Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
     Route::patch('/users/{user}/role', [\App\Http\Controllers\Admin\DashboardController::class, 'updateRole'])->name('users.update-role');
+    Route::resource('categories', CategoryController::class)->except(['show']);
 });
 
 require __DIR__ . '/auth.php';

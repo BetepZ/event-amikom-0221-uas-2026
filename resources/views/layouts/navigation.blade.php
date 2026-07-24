@@ -22,6 +22,9 @@
                             <x-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="text-purple-600 font-bold border-purple-400">
                                 {{ __('Panel Admin') }}
                             </x-nav-link>
+                            <x-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')" class="text-purple-600 font-bold border-purple-400 ml-4">
+                                {{ __('Manajemen Kategori') }}
+                            </x-nav-link>
                         @elseif(Auth::user()->role === 'tenant')
                             <x-nav-link :href="route('tenant.dashboard')" :active="request()->routeIs('tenant.dashboard')">
                                 {{ __('Kelola Event') }}
@@ -111,6 +114,9 @@
                 @if(Auth::user()->role === 'admin')
                     <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="text-purple-600 font-bold">
                         {{ __('Panel Admin') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('admin.categories.index')" :active="request()->routeIs('admin.categories.*')" class="text-purple-600 font-bold">
+                        {{ __('Manajemen Kategori') }}
                     </x-responsive-nav-link>
                 @elseif(Auth::user()->role === 'tenant')
                     <x-responsive-nav-link :href="route('tenant.dashboard')" :active="request()->routeIs('tenant.dashboard')">
