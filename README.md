@@ -14,6 +14,12 @@
 Dibuat oleh **Betano Putra Fortuna**
 Proyek Ujian Akhir Semester (UAS) — Mata Kuliah Digital Bisnis
 
+## 🌐 Live Demo & Testing
+
+Aplikasi ini telah di-deploy dan dapat diakses secara online (Live) untuk keperluan pengujian.
+
+👉 **Kunjungi Tautan Uji Coba:** [https://betanofortuna-private-room.my.id]
+
 </div>
 
 ---
